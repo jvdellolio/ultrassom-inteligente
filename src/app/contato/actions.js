@@ -20,22 +20,20 @@ export async function sendBudgetEmail(prevState, formData) {
       : "Solicitação de orçamento - Ultrassom Inteligente";
 
     const text = `
-Nova solicitação de orçamento
-
-Nome: ${name}
-E-mail: ${email}
-Máquina: ${machine || "Não informada"}
-
-Mensagem:
-${message}
-    `.trim();
+                    Nova solicitação de orçamento
+                    Nome: ${name}
+                    E-mail: ${email}
+                    Máquina: ${machine || "Não informada"}
+                    Mensagem:
+                    ${message}
+                  `.trim();
 
     await resend.emails.send({
-      from: process.env.ORCAMENTO_FROM_EMAIL,
-      to: process.env.ORCAMENTO_TO_EMAIL,
+      from: process.env.CONTACT_FROM_EMAIL,
+      to: process.env.CONTACT_TO_EMAIL,
       replyTo: email,
-      subject,
-      text,
+      subject: machine ? `Novo Orçamento - ${machine}` : "Novo Orçamento",
+      text: `Nome: ${name}\nEmail: ${email}\nMáquina: ${machine || "-"}\n\nMensagem:\n${message}`,
     });
 
     return { ok: true, message: "Orçamento enviado com sucesso!" };
