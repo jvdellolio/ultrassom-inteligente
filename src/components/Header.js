@@ -30,7 +30,7 @@ export default function Header() {
     setOpen(false);
   }, [pathname]);
 
-  // Trava o scroll do body quando o menu estiver aberto
+  // Trava scroll no mobile quando menu abre
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -42,86 +42,95 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
-            <span className="text-sm font-bold tracking-tight">UI</span>
-          </div>
-
-          <div className="leading-tight">
-            <p className="text-sm font-semibold text-slate-900">
-              Ultrassom <span className="text-blue-700">Inteligente</span>
-            </p>
-            <p className="text-xs text-slate-500">Orçamento por e-mail</p>
-          </div>
-        </Link>
-
-        {/* Nav desktop */}
-        <nav className="hidden items-center gap-2 md:flex">
-          {nav.map((item) => {
-            const active = isActive(pathname, item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "rounded-md px-3 py-2 text-sm font-medium transition",
-                  active
-                    ? "bg-blue-50 text-blue-800 ring-1 ring-blue-100"
-                    : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-          <Link
-            href="/contato"
-            className="ml-2 inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
-          >
-            Solicitar orçamento
+      <div className="mx-auto max-w-6xl px-6 py-4">
+        {/* Layout desktop: logo (esq) | nav (centro) | botão (dir) */}
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
+              <span className="text-sm font-bold tracking-tight">UI</span>
+            </div>
+            <div className="leading-tight">
+              <p className="text-sm font-semibold text-slate-900">
+                Ultrassom <span className="text-blue-700">Inteligente</span>
+              </p>
+              <p className="text-xs text-slate-500">Orçamento por e-mail</p>
+            </div>
           </Link>
-        </nav>
 
-        {/* Botão mobile */}
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 md:hidden"
-          aria-label="Abrir menu"
-          aria-expanded={open}
-        >
-          {/* Ícone hambúrguer */}
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M4 6h16M4 12h16M4 18h16"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+          {/* Nav (centro) - desktop */}
+          <nav className="hidden items-center gap-2 md:flex">
+            {nav.map((item) => {
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "rounded-md px-3 py-2 text-sm font-medium transition",
+                    active
+                      ? "bg-blue-50 text-blue-800 ring-1 ring-blue-100"
+                      : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Ações (direita) - desktop */}
+          <div className="hidden justify-end md:flex">
+            <Link
+              href="/contato"
+              className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+            >
+              Solicitar orçamento
+            </Link>
+          </div>
+
+          {/* Botão mobile (fica no canto direito) */}
+          <div className="flex justify-end md:hidden">
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="inline-flex items-center justify-center rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+              aria-label="Abrir menu"
+              aria-expanded={open}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 6h16M4 12h16M4 18h16"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Overlay + Drawer mobile */}
+      {/* Menu mobile FULL SCREEN (não mistura com o site) */}
       {open && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          {/* Fundo escuro */}
+        <div className="fixed inset-0 z-60 md:hidden">
+          {/* fundo escuro */}
           <button
-            className="absolute inset-0 bg-slate-900/40"
+            type="button"
+            className="absolute inset-0 bg-slate-900/50"
             aria-label="Fechar menu"
             onClick={() => setOpen(false)}
           />
 
-          {/* Painel */}
-          <div className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-xl ring-1 ring-slate-200">
+          {/* tela branca por cima (full screen) */}
+          <div className="absolute inset-0 bg-white">
+            {/* topo do menu */}
             <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
@@ -141,7 +150,6 @@ export default function Header() {
                 className="rounded-md border border-slate-200 bg-white p-2 text-slate-700 hover:bg-slate-50"
                 aria-label="Fechar"
               >
-                {/* X */}
                 <svg
                   width="18"
                   height="18"
@@ -159,34 +167,37 @@ export default function Header() {
               </button>
             </div>
 
-            <nav className="px-3 py-3">
-              {nav.map((item) => {
-                const active = isActive(pathname, item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition",
-                      active
-                        ? "bg-blue-50 text-blue-800 ring-1 ring-blue-100"
-                        : "text-slate-800 hover:bg-slate-50"
-                    )}
-                  >
-                    <span>{item.label}</span>
-                    <span className="text-slate-400">›</span>
-                  </Link>
-                );
-              })}
+            {/* links */}
+            <nav className="px-5 py-5">
+              <div className="grid gap-3">
+                {nav.map((item) => {
+                  const active = isActive(pathname, item.href);
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        "flex items-center justify-between rounded-xl px-4 py-4 text-base font-medium transition",
+                        active
+                          ? "bg-blue-50 text-blue-800 ring-1 ring-blue-100"
+                          : "bg-slate-50 text-slate-900 hover:bg-slate-100"
+                      )}
+                    >
+                      <span>{item.label}</span>
+                      <span className="text-slate-400">›</span>
+                    </Link>
+                  );
+                })}
 
-              <Link
-                href="/contato"
-                className="mt-3 flex w-full items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
-              >
-                Solicitar orçamento
-              </Link>
+                <Link
+                  href="/contato"
+                  className="mt-2 flex w-full items-center justify-center rounded-xl bg-blue-600 px-4 py-4 text-base font-semibold text-white shadow-sm hover:bg-blue-700"
+                >
+                  Solicitar orçamento
+                </Link>
+              </div>
 
-              <p className="mt-4 px-2 text-xs text-slate-500">
+              <p className="mt-5 text-sm text-slate-500">
                 Orçamentos e dúvidas são respondidos por e-mail.
               </p>
             </nav>
