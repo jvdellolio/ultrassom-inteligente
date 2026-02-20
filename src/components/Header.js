@@ -122,7 +122,7 @@ export default function Header() {
 
       {/* MENU MOBILE: FULL SCREEN, SEM VAZAR O SITE */}
       {open && (
-        <div className="fixed inset-0 z-9999 md:hidden">
+        <div className="fixed inset-0 z-[9999] md:hidden">
           {/* backdrop */}
           <button
             type="button"
@@ -131,9 +131,9 @@ export default function Header() {
             onClick={() => setOpen(false)}
           />
 
-          {/* painel branco cobrindo a tela toda */}
-          <div className="absolute inset-0 bg-white">
-            {/* topo do menu */}
+          {/* PAINEL FULLSCREEN REAL (dvh) */}
+          <div className="absolute inset-0 h-[100dvh] bg-white flex flex-col">
+            {/* topo */}
             <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
@@ -164,9 +164,9 @@ export default function Header() {
               </button>
             </div>
 
-            {/* links (lista limpa, sem “cartões” sobrepondo) */}
-            <nav className="px-5 py-4">
-              <ul className="divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200">
+            {/* CONTEÚDO DO MENU (rola aqui dentro, não no site) */}
+            <div className="flex-1 overflow-y-auto px-5 py-4">
+              <ul className="divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white">
                 {nav.map((item) => {
                   const active = isActive(pathname, item.href);
                   return (
@@ -196,7 +196,7 @@ export default function Header() {
               <p className="mt-4 text-sm text-slate-500">
                 Orçamentos e dúvidas são respondidos por e-mail.
               </p>
-            </nav>
+            </div>
           </div>
         </div>
       )}
